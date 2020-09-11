@@ -26,7 +26,10 @@ fn main() {
 
     let mut config = match Config::default() {
         Ok(config) => config,
-        Err(e) => exit::exit_from_error(e.into()),
+        Err(e) => {
+            eprintln!("failed to load config: {}", e);
+            exit::exit_from_error(e.into())
+        }
     };
 
     match matches.subcommand() {

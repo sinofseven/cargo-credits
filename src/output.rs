@@ -17,7 +17,6 @@ pub fn create_credits(current_package_name: &String, packages: &Vec<Package>) ->
             Some(repo) => repo,
             None => "",
         };
-        let manifest = &package.manifest_path;
         let license = match get_license_text(package, &scorer) {
             Ok(tex) => tex,
             Err(tex) => tex,

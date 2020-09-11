@@ -15,7 +15,7 @@ pub fn get_package_name() -> Result<String, String> {
         Ok(text) => text,
         Err(e) => {
             return Err(format!(
-                "failed to read Cargo.toml in current directory ({})",
+                "failed to read Cargo.toml in current directory: {}",
                 e
             ))
         }
@@ -23,7 +23,7 @@ pub fn get_package_name() -> Result<String, String> {
     let resp: CargoToml = match toml::from_str(&text) {
         Err(e) => {
             return Err(format!(
-                "failed to parse Cargo.toml in current directory ({})",
+                "failed to parse Cargo.toml in current directory: {}",
                 e
             ))
         }
