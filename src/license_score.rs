@@ -1,3 +1,8 @@
+// I used the following code as a guide.
+//   - https://github.com/Songmu/gocredits/blob/cb6a1f54c6/licensescore.go
+//   - https://github.com/licensee/licensee/blob/3a028b6cb9/lib/licensee/project_files/license_file.rb
+//   - https://github.com/licensee/licensee/blob/3a028b6cb9/spec/licensee/project_files/license_file_spec.rb
+
 use regex::Regex;
 #[cfg(test)]
 use rstest::rstest;

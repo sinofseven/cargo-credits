@@ -1,9 +1,9 @@
-use clap::ArgMatches;
-use cargo::util::Config;
-use cargo::util::command_prelude::ArgMatchesExt;
 use crate::exit;
-use cargo::CliError;
 use cargo::ops::OutputMetadataOptions;
+use cargo::util::command_prelude::ArgMatchesExt;
+use cargo::util::Config;
+use cargo::CliError;
+use clap::ArgMatches;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -11,12 +11,12 @@ pub struct Package {
     pub name: String,
     pub manifest_path: String,
     pub repository: Option<String>,
-    pub license_text: Option<String>
+    pub license_text: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 struct ExportInfo {
-    packages: Vec<Package>
+    packages: Vec<Package>,
 }
 
 pub fn get_metadata(args: &ArgMatches, config: &mut Config) -> Vec<Package> {
@@ -34,7 +34,7 @@ pub fn get_metadata(args: &ArgMatches, config: &mut Config) -> Vec<Package> {
         all_features: false,
         no_deps: false,
         version: 1,
-        filter_platforms: vec![]
+        filter_platforms: vec![],
     };
 
     let result = match cargo::ops::output_metadata(&ws, &option) {
@@ -56,8 +56,8 @@ pub fn get_metadata(args: &ArgMatches, config: &mut Config) -> Vec<Package> {
         Err(e) => {
             eprintln!("aaa");
             exit::exit(1)
-        },
-        Ok(info) => info
+        }
+        Ok(info) => info,
     };
     export_info.packages
 }

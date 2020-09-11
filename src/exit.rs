@@ -1,5 +1,5 @@
-use cargo::CliError;
 use cargo::core::Shell;
+use cargo::CliError;
 
 pub fn exit(code: i32) -> ! {
     let e = CliError::code(code);

@@ -14,7 +14,7 @@ cargo-credits creates CREDITS file from LICENSE files of dependencies
 $ cargo install cargo-credits
 ```
 
-## How to use
+## Usage
 
 in your rust repository root
 
@@ -22,11 +22,19 @@ in your rust repository root
 $ cargo credits
 ```
 
+create CREDITS file.
+
 ## Description
 
 When distributing built executable in Rust, we need to include LICENSE of the dependent
 libraries into the package.  
 So cargo-credits creates CREDITS file.
+
+## Creating with reference to next oss
+cargo-credits is based on next oss.
+
+- [gocredits](https://github.com/Songmu/gocredits) ([MIT License](https://github.com/Songmu/gocredits/blob/master/LICENSE))
+- [Licensee](https://github.com/licensee/licensee) ([MIT License](https://github.com/licensee/licensee/blob/master/LICENSE.md))
 
 ## Author
 

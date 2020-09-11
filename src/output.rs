@@ -1,5 +1,8 @@
-use crate::metadata::Package;
+// I used the following code as a guide.
+//   - https://github.com/Songmu/gocredits/blob/cb6a1f54c6/gocredits.go
+
 use crate::license_score::LicenseScorer;
+use crate::metadata::Package;
 use std::path::PathBuf;
 
 pub fn create_credits(current_package_name: &String, packages: &Vec<Package>) -> String {
@@ -7,24 +10,24 @@ pub fn create_credits(current_package_name: &String, packages: &Vec<Package>) ->
     let scorer = LicenseScorer::new();
     for package in packages {
         if current_package_name.eq(&package.name) {
-            continue
+            continue;
         }
         let name = &package.name;
         let repository = match &package.repository {
             Some(repo) => repo,
-            None => ""
+            None => "",
         };
         let manifest = &package.manifest_path;
         let license = match get_license_text(package, &scorer) {
             Ok(tex) => tex,
-            Err(tex) => tex
+            Err(tex) => tex,
         };
         let inner_lines = [
             format!("{}", name),
             format!("{}", repository),
             format!("----------------------------------------------------------------"),
             format!("{}", license),
-            format!("================================================================\n")
+            format!("================================================================\n"),
         ];
         lines.push(inner_lines.join("\n"));
     }
@@ -42,7 +45,7 @@ fn get_license_text(package: &Package, scorer: &LicenseScorer) -> Result<String,
 
     let dir_entries = match path_dir.read_dir() {
         Ok(entries) => entries,
-        Err(e) => return Err(format!("failed to read directory: {}", e))
+        Err(e) => return Err(format!("failed to read directory: {}", e)),
     };
 
     let mut score: u8 = 0;
@@ -53,10 +56,12 @@ fn get_license_text(package: &Package, scorer: &LicenseScorer) -> Result<String,
             let os_file_name = entry.file_name();
             let name = os_file_name.to_str().unwrap();
             let path = entry.path();
-            if path.is_dir() { continue; }
+            if path.is_dir() {
+                continue;
+            }
             let current_score = scorer.get_score(name);
             if score < current_score {
-                score  = current_score;
+                score = current_score;
                 str_path_license = Some(path);
             }
         }
@@ -66,7 +71,7 @@ fn get_license_text(package: &Package, scorer: &LicenseScorer) -> Result<String,
         None => Ok("Not Found License File".to_string()),
         Some(path) => match std::fs::read_to_string(path) {
             Err(e) => Err(format!("failed to read license: {}", e)),
-            Ok(tex) => Ok(tex)
-        }
+            Ok(tex) => Ok(tex),
+        },
     }
 }

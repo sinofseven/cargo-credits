@@ -1,15 +1,18 @@
+// I used the following code as a guide.
+//   - https://github.com/Songmu/gocredits/blob/cb6a1f54c6/gocredits.go
+
 #[macro_use]
 extern crate clap;
 #[cfg(test)]
 use rstest::rstest;
 
-use clap::{App, SubCommand, ArgMatches};
 use cargo::util::Config;
+use clap::{App, ArgMatches, SubCommand};
 
-mod exit;
-mod metadata;
 mod cargo_toml;
+mod exit;
 mod license_score;
+mod metadata;
 mod output;
 mod rust_license;
 
@@ -23,7 +26,7 @@ fn main() {
 
     let mut config = match Config::default() {
         Ok(config) => config,
-        Err(e) => exit::exit_from_error(e.into())
+        Err(e) => exit::exit_from_error(e.into()),
     };
 
     match matches.subcommand() {
