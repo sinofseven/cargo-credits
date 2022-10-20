@@ -1,69 +1,24 @@
-// I used the following code as a guide.
-//   - https://github.com/Songmu/gocredits/blob/cb6a1f54c6/gocredits.go
-
-#[macro_use]
-extern crate clap;
-#[cfg(test)]
-use rstest::rstest;
-
-use cargo::util::Config;
-use clap::{App, ArgMatches, SubCommand};
-
-mod cargo_toml;
-mod exit;
-mod license_score;
+mod cmd;
 mod metadata;
-mod output;
-mod rust_license;
+mod manifest;
+mod bundle;
 
-fn main() {
-    let matches = App::new(crate_name!())
-        .author(crate_authors!())
-        .about(crate_description!())
-        .version(crate_version!())
-        .subcommand(SubCommand::with_name("credits").about(crate_description!()))
-        .get_matches();
+fn main() -> Result<(), String> {
+    let current_directory = std::env::current_dir().map_err(|e| format!("failed to resolve current directory: {}", e))?;
+    let cli_args = crate::cmd::get_cli_input()?;
+    let metadata = crate::metadata::get_metadata(&cli_args.manifest_path)?;
+    let package_name = crate::manifest::get_package_name(&cli_args.manifest_path, &current_directory)?;
+    let lines = crate::bundle::bundle(&package_name, &metadata.packages);
 
-    let mut config = match Config::default() {
-        Ok(config) => config,
-        Err(e) => {
-            eprintln!("failed to load config: {}", e);
-            exit::exit_from_error(e.into())
+    if let Some(output_path) = cli_args.output_file {
+        let path = current_directory.join(output_path);
+        let text = lines.join("\n");
+        std::fs::write(&path, text).map_err(|e| format!("failed to write credits file: path={}, err={}", &path.display(), e))
+    } else {
+        for l in lines {
+            println!("{}", l);
         }
-    };
-
-    match matches.subcommand() {
-        ("credits", Some(args)) => run(args, &mut config),
-        _ => {
-            eprintln!("no exist subcommand");
-            exit::exit(1);
-        }
+        Ok(())
     }
 }
 
-fn run(args: &ArgMatches, config: &mut Config) {
-    let current_package_name = match cargo_toml::get_package_name() {
-        Ok(name) => name,
-        Err(e) => {
-            eprintln!("{}", e);
-            exit::exit(1);
-        }
-    };
-    let rust_package = match rust_license::get_rust_license() {
-        Ok(package) => package,
-        Err(e) => {
-            eprintln!("{}", e);
-            exit::exit(1)
-        }
-    };
-    let mut packages = metadata::get_metadata(args, config);
-    packages.insert(0, rust_package);
-    let text = output::create_credits(&current_package_name, &packages);
-    match std::fs::write("./CREDITS", text) {
-        Ok(_) => (),
-        Err(e) => {
-            eprintln!("failed to write CREDITS: {}", e);
-            exit::exit(1)
-        }
-    }
-}
