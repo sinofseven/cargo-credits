@@ -4,7 +4,7 @@ version = "0.2.0"
 authors = ["sinofseven <em.s.00001@gmail.com>"]
 edition = "2021"
 
-description = "creates CREDITS file from LICENSE files of dependencies"
+description = "display licenses of dependencies"
 repository = "https://github.com/sinofseven/cargo-credits"
 license = "MIT"
 readme = "README.md"
@@ -16,3 +16,6 @@ keywords = ["license", "credits", "cli", "cargo"]
 [dependencies]
 clap = {version = "4.0.4", features=["cargo"]}
 cargo_metadata = { version = "0.15.0", default-features = false }
+serde = {version = "1", features=["derive"]}
+toml = "0.5.9"
+colored = "2.0.0"

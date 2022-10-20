@@ -6,7 +6,7 @@ cargo credits
 
 [license]: https://github.com/sinofseven/cargo-credits/blob/master/LICENSE
 
-cargo-credits creates CREDITS file from LICENSE files of dependencies
+cargo-credits display licenses of dependencies
 
 ## Installation
 
@@ -16,25 +16,25 @@ $ cargo install cargo-credits
 
 ## Usage
 
-in your rust repository root
-
 ```console
-$ cargo credits
+$ cargo credits --help
+display licenses of dependencies
+
+Usage: cargo-credits credits [OPTIONS]
+
+Options:
+  -m, --manifest-path <MANIFEST_PATH>
+          path to Cargo.toml
+  -o, --output-file <OUTPUT_FILE>
+          path to output file (if this option is not specified, print to standard output)
+  -h, --help
+          Print help information
 ```
-
-create CREDITS file.
-
-## Description
-
-When distributing built executable in Rust, we need to include LICENSE of the dependent
-libraries into the package.  
-So cargo-credits creates CREDITS file.
 
 ## Creating with reference to next oss
 cargo-credits is based on next oss.
 
-- [gocredits](https://github.com/Songmu/gocredits) ([MIT License](https://github.com/Songmu/gocredits/blob/master/LICENSE))
-- [Licensee](https://github.com/licensee/licensee) ([MIT License](https://github.com/licensee/licensee/blob/master/LICENSE.md))
+- [cargo-lichking](https://github.com/Nemo157/cargo-lichking)
 
 ## Author
 
